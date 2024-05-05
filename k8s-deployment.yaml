@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: student-deployment
+  namespace: student
+spec:
+  selector:
+    matchLabels:
+      app: spring-boot-k8s-student
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: spring-boot-k8s-student
+    spec:
+      containers:
+        - name: student-app-container
+          image: 'student-app-service:5.0'
+          ports:
+          - containerPort: 9292
+          env:
+            - name: DB_NAME
+              value: db_student
+            - name: DB_USERNAME
+              value: root
+            - name: DB_PASSWORD
+              value: root
+            - name: DB_HOST
+              value: mysql
