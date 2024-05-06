@@ -41,10 +41,16 @@ spec:
           image: mysql:latest # image from docker-hub
           imagePullPolicy: IfNotPresent
           env:
-            - name: MYSQL_ROOT_PASSWORD
-              value: root
+            - name: MYSQL_ROOT_PASSWORD # Setting Database password from a 'Secret'
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: password
             - name: MYSQL_DATABASE # Setting Database Name from a 'ConfigMap'
-              value: db_student
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: dbName
           ports:
             - containerPort: 3306
               name: mysql

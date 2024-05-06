@@ -15,15 +15,27 @@ spec:
     spec:
       containers:
         - name: student-app-container
-          image: 'student-app-service:5.0'
+          image: 'student-app-service:6.0'
           ports:
           - containerPort: 9292
           env:
-            - name: DB_NAME
-              value: db_student
-            - name: DB_USERNAME
-              value: root
-            - name: DB_PASSWORD
-              value: root
             - name: DB_HOST
-              value: mysql
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: host
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: dbName
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: password
